@@ -52,6 +52,20 @@ app.put('/recipes/:id', (req, res) => {
     })
 })
 
+// delete a recipe by its ID
+app.delete('/recipes/:id', (req, res) => {
+    const { id } = req.params;
+
+    //delete the recipe from the 'recipes' table by its ID
+    db.run('DELETE FROM recipes WHERE id = ?', id, (err) => {
+        if(err){
+            res.status(500).json({error: err.message});
+            return;
+        }
+        res.json({message: 'Recipe deleted'});
+    })
+})
+
 // start the server
 const PORT = process.env.PORT || 3000
 app.listen(PORT, () => {
