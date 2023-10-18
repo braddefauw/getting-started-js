@@ -23,6 +23,20 @@ app.get('/recipes', (req, res) => {
     })
 })
 
+// create a new recipe
+app.post('/recipes', (req, res) => {
+    const { name, ingredients, instructions } = req.body;
+
+    // insert the provided data into the 'recipes' table
+    db.run('INSERT INTO recipes (name, ingredients, instructions) VALUES (?, ?, ?)', [name, ingredients, instructions], function(err){
+        if(err){
+            res.status(500).json({error: err.message});
+            return;
+        }
+        res.json({ id: this.lastID}) //respond with the ID of the newly created recipe
+    })
+})
+
 // start the server
 const PORT = process.env.PORT || 3000
 app.listen(PORT, () => {
