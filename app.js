@@ -37,6 +37,21 @@ app.post('/recipes', (req, res) => {
     })
 })
 
+// update a recipe by its ID
+app.put('/recipes/:id', (req, res) => {
+    const { id } = req.params;
+    const { name, ingredients, instructions } = req.body;
+
+    // update the recipe in the 'recipes' table using the provided data and the recipe's ID
+    db.run('UPDATE recipes SET name = ?, ingredients = ?, instructions = ? WHERE id = ?', [name, ingredients, instructions, id], (err) => {
+        if(err){
+            res.status(500).json({error: err.message});
+            return;
+        }
+        res.json({message: 'Recipe updated'})
+    })
+})
+
 // start the server
 const PORT = process.env.PORT || 3000
 app.listen(PORT, () => {
